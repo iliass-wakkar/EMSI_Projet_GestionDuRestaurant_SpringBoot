@@ -1,6 +1,6 @@
 package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users;
 
-import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.UserRole;
+import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.UserRole;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles.Users;
 
 import java.time.LocalDateTime;

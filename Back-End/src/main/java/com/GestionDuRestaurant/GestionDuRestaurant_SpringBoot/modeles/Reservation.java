@@ -1,5 +1,6 @@
 package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles;
 
+import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.ReservationStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotNull(message = "Reservation date and time is required")
     @Column(name = "reservation_date_time", nullable = false)
@@ -25,9 +26,9 @@ public class Reservation {
     private Integer numberOfGuests;
 
     @NotNull(message = "Status is required")
-    @Size(max = 20, message = "Status must be less than 20 characters")
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private ReservationStatus status;
 
     @Size(max = 500, message = "Note must be less than 500 characters")
     @Column(name = "note")
@@ -41,13 +42,18 @@ public class Reservation {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
     // Default constructor
     public Reservation() {
         this.createdAt = LocalDateTime.now();
+        this.status = ReservationStatus.PENDING;
     }
 
     // Constructor with required fields
-    public Reservation(LocalDateTime reservationDateTime, Integer numberOfGuests, String status,
+    public Reservation(LocalDateTime reservationDateTime, Integer numberOfGuests, ReservationStatus status,
             Restaurant restaurant) {
         this.reservationDateTime = reservationDateTime;
         this.numberOfGuests = numberOfGuests;
@@ -57,11 +63,11 @@ public class Reservation {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -81,11 +87,11 @@ public class Reservation {
         this.numberOfGuests = numberOfGuests;
     }
 
-    public String getStatus() {
+    public ReservationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReservationStatus status) {
         this.status = status;
     }
 
@@ -111,5 +117,13 @@ public class Reservation {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

@@ -1,7 +1,7 @@
 package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles;
 
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.UserResponse;
-import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.UserRole;
+import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;

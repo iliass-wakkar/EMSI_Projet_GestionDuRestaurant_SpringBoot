@@ -2,9 +2,8 @@ package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.services;
 
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.AuthRequest;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.UserCreateRequest;
-import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.UserResponse;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.UserUpdateRequest;
-import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.UserRole;
+import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.UserRole;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles.Users;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.repositorys.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.List;
 

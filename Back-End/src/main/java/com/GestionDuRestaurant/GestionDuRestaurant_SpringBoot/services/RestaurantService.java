@@ -171,24 +171,12 @@ public class RestaurantService {
         }
 
         // 4. Update restaurant details
-        if (restaurantRequest.getName() != null) {
-            existingRestaurant.setName(restaurantRequest.getName());
-        }
-        if (restaurantRequest.getDescription() != null) {
-            existingRestaurant.setDescription(restaurantRequest.getDescription());
-        }
-        if (restaurantRequest.getAddress() != null) {
-            existingRestaurant.setAddress(restaurantRequest.getAddress());
-        }
-        if (restaurantRequest.getCity() != null) {
-            existingRestaurant.setCity(restaurantRequest.getCity());
-        }
-        if (restaurantRequest.getPhoneNumber() != null) {
-            existingRestaurant.setPhoneNumber(restaurantRequest.getPhoneNumber());
-        }
-        if (restaurantRequest.getEmail() != null) {
-            existingRestaurant.setEmail(restaurantRequest.getEmail());
-        }
+        existingRestaurant.setName(restaurantRequest.getName());
+        existingRestaurant.setDescription(restaurantRequest.getDescription());
+        existingRestaurant.setAddress(restaurantRequest.getAddress());
+        existingRestaurant.setCity(restaurantRequest.getCity());
+        existingRestaurant.setPhoneNumber(restaurantRequest.getPhoneNumber());
+        existingRestaurant.setEmail(restaurantRequest.getEmail());
 
         // Update owner if provided and user is admin
         if (currentUserRole == ADMIN && restaurantRequest.getOwnerId() != null) {

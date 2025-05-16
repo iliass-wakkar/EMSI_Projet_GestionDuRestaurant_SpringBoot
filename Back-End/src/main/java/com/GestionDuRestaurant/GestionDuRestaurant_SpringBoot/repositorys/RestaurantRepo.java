@@ -20,7 +20,7 @@ public interface RestaurantRepo extends JpaRepository<Restaurant, Integer> {
     List<Restaurant> findByNameContainingIgnoreCase(String name);
 
     // Find restaurants by manager
-    List<Restaurant> findByManager(Users manager);
+    Restaurant findByManager(Users manager);
 
     // Find restaurants by owner
     List<Restaurant> findByOwner(Users owner);

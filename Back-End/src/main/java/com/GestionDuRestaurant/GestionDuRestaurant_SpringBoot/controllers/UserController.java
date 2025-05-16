@@ -4,7 +4,7 @@ import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.AuthReq
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.AuthResponse;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.UserCreateRequest;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users.UserUpdateRequest;
-import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.UserRole;
+import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.UserRole;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.annotations.CurrentUser;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles.Users;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.services.UserService;
