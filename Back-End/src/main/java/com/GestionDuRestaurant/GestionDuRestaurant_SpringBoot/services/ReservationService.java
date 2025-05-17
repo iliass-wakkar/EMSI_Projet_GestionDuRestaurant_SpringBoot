@@ -77,7 +77,7 @@ public class ReservationService {
         Client client = new Client();
         client.setGender(request.getGender());
         client.setAgeGroup(request.getAgeGroup());
-        client.setCity(request.getCity());
+        client.setCity(restaurant.getCity());
         client = clientRepo.save(client);
 
         // 5. Create reservation

@@ -253,20 +253,4 @@ public class Users {
         return getClass().hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", creationDate=" + creationDate +
-                ", lastLogin=" + lastLogin +
-                ", role=" + role +
-                ", active=" + active +
-                ", locked=" + locked +
-                ", expired=" + expired +
-                ", credentialsExpired=" + credentialsExpired +
-                '}';
-    }
 }

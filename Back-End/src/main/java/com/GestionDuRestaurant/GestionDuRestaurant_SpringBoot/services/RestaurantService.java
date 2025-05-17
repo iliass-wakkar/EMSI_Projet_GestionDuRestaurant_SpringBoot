@@ -1,13 +1,12 @@
 package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.services;
 
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Restaurant.RestaurantRequest;
-import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.UserRole;
+import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.UserRole;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles.Restaurant;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles.Users;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.repositorys.RestaurantRepo;
 import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.repositorys.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.UserRole.*;
+import static com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.enums.UserRole.*;
 
 @Service
 public class RestaurantService {
@@ -44,7 +43,7 @@ public class RestaurantService {
 
     @Transactional
     public Restaurant createRestaurant(Users creator, RestaurantRequest restaurantRequest) {
-        if(creator == null) {
+        if (creator == null) {
             throw new SecurityException("Authentication required");
         }
         // 1. Check creator's role
@@ -72,8 +71,8 @@ public class RestaurantService {
             }
 
             // Check if manager is already assigned to a restaurant
-            List<Restaurant> existingRestaurants = restaurantRepo.findByManager(manager);
-            if (!existingRestaurants.isEmpty()) {
+            Restaurant existingRestaurants = restaurantRepo.findByManager(manager);
+            if (existingRestaurants != null) {
                 throw new IllegalArgumentException("Manager is already assigned to a restaurant");
             }
 
@@ -151,14 +150,11 @@ public class RestaurantService {
             }
 
             // Check if manager is already assigned to another restaurant
-            List<Restaurant> existingRestaurantsByManager = restaurantRepo.findByManager(newManager);
-            existingRestaurantsByManager = existingRestaurantsByManager.stream()
-                    .filter(r -> !r.getId().equals(restaurantId))
-                    .collect(Collectors.toList());
+            Restaurant existingRestaurantByManager = restaurantRepo.findByManager(newManager);
 
-            if (!existingRestaurantsByManager.isEmpty()) {
+            if (existingRestaurantByManager == null) {
                 throw new IllegalArgumentException("Manager is already assigned to another restaurant: " +
-                        existingRestaurantsByManager.get(0).getName());
+                        existingRestaurantByManager.getName());
             }
 
             // For OWNER role, additional manager validation
@@ -171,12 +167,24 @@ public class RestaurantService {
         }
 
         // 4. Update restaurant details
-        existingRestaurant.setName(restaurantRequest.getName());
-        existingRestaurant.setDescription(restaurantRequest.getDescription());
-        existingRestaurant.setAddress(restaurantRequest.getAddress());
-        existingRestaurant.setCity(restaurantRequest.getCity());
-        existingRestaurant.setPhoneNumber(restaurantRequest.getPhoneNumber());
-        existingRestaurant.setEmail(restaurantRequest.getEmail());
+        if (restaurantRequest.getName() != null) {
+            existingRestaurant.setName(restaurantRequest.getName());
+        }
+        if (restaurantRequest.getDescription() != null) {
+            existingRestaurant.setDescription(restaurantRequest.getDescription());
+        }
+        if (restaurantRequest.getAddress() != null) {
+            existingRestaurant.setAddress(restaurantRequest.getAddress());
+        }
+        if (restaurantRequest.getCity() != null) {
+            existingRestaurant.setCity(restaurantRequest.getCity());
+        }
+        if (restaurantRequest.getPhoneNumber() != null) {
+            existingRestaurant.setPhoneNumber(restaurantRequest.getPhoneNumber());
+        }
+        if (restaurantRequest.getEmail() != null) {
+            existingRestaurant.setEmail(restaurantRequest.getEmail());
+        }
 
         // Update owner if provided and user is admin
         if (currentUserRole == ADMIN && restaurantRequest.getOwnerId() != null) {
@@ -203,7 +211,6 @@ public class RestaurantService {
         return manager.getManager() != null && manager.getManager().equals(owner);
     }
 
-
     @Transactional(readOnly = true)
     public List<Restaurant> getAllRestaurants(Users currentUser) {
         UserRole userRole = currentUser.getRole();
@@ -211,7 +218,7 @@ public class RestaurantService {
             case ADMIN:
                 return restaurantRepo.findAll();
             case MANAGER:
-                return restaurantRepo.findByManager(currentUser);
+                return (List<Restaurant>) restaurantRepo.findByManager(currentUser);
             case OWNER:
                 return restaurantRepo.findByOwner(currentUser);
             default:

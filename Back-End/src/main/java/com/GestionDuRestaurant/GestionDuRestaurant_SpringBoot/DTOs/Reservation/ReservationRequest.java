@@ -29,8 +29,6 @@ public class ReservationRequest {
 
     private AgeGroup ageGroup;
 
-    @Size(max = 100, message = "City must be less than 100 characters")
-    private String city;
 
     // Getters and Setters
     public LocalDateTime getReservationDateTime() {
@@ -81,11 +79,4 @@ public class ReservationRequest {
         this.ageGroup = ageGroup;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
 }
