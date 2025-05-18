@@ -107,7 +107,7 @@ public class UserController {
 
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<?> deleteUser(
-            @PathVariable Integer userId,
+            @PathVariable Long userId,
             @CurrentUser Users currentUser) {
 
         try {
@@ -146,7 +146,7 @@ public class UserController {
     @PutMapping("/users/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUserProfile(
-            @PathVariable Integer userId,
+            @PathVariable Long userId,
             @RequestBody @Valid UserUpdateRequest updateRequest,
             @CurrentUser Users currentUser) {
         try {
@@ -174,7 +174,7 @@ public class UserController {
 
     @GetMapping("/{userId}/profile")
     public ResponseEntity<?> getUserProfile(
-            @PathVariable Integer userId,
+            @PathVariable Long userId,
             Authentication authentication) {
         try {
             Users currentUser = (Users) authentication.getPrincipal();

@@ -60,7 +60,7 @@ public class ReservationController {
     // Read Endpoint (Get by ID)
     @GetMapping("/reservations/{reservationId}")
     public ResponseEntity<?> getReservationById(
-            @PathVariable Integer reservationId,
+            @PathVariable Long reservationId,
             @CurrentUser Users currentUser) {
         try {
             Reservation reservation = reservationService.getReservationById(reservationId, currentUser);
@@ -77,7 +77,7 @@ public class ReservationController {
     // Update Endpoint
     @PutMapping("/reservations/{reservationId}")
     public ResponseEntity<?> updateReservation(
-            @PathVariable Integer reservationId,
+            @PathVariable Long reservationId,
             @Valid @RequestBody ReservationRequest reservationRequest,
             @CurrentUser Users currentUser) {
         try {
@@ -99,7 +99,7 @@ public class ReservationController {
     // Delete Endpoint
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<?> cancelReservation(
-            @PathVariable Integer reservationId,
+            @PathVariable Long reservationId,
             @CurrentUser Users currentUser) {
         try {
             reservationService.deleteReservation(reservationId, currentUser);

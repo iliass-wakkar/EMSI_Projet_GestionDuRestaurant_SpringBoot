@@ -14,25 +14,26 @@ import java.util.Optional;
 public interface MenuItemRepo extends JpaRepository<MenuItem, Long> {
     // Find by menu
     List<MenuItem> findByMenu(Menu menu);
-    
+
     // Find by menu ordered by display order
     List<MenuItem> findByMenuOrderByDisplayOrderAsc(Menu menu);
-    
+
     // Find by item
     List<MenuItem> findByItem(Item item);
-    
+
     // Find by menu and item
     Optional<MenuItem> findByMenuAndItem(Menu menu, Item item);
-    
+
     // Find by valid date range
-    List<MenuItem> findByMenuAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Menu menu, LocalDate currentDate, LocalDate currentDate2);
-    
+    List<MenuItem> findByMenuAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Menu menu, LocalDate currentDate,
+            LocalDate currentDate2);
+
     // Delete by menu and item
     void deleteByMenuAndItem(Menu menu, Item item);
-    
+
     // Delete by menu
     void deleteByMenu(Menu menu);
-    
+
     // Delete by item
     void deleteByItem(Item item);
-} 
+}

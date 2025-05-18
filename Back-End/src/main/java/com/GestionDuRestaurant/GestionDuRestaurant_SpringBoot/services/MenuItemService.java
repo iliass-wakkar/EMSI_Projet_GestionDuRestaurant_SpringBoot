@@ -32,7 +32,7 @@ public class MenuItemService {
     private ItemRepo itemRepo;
 
     @Transactional(readOnly = true)
-    public List<MenuItem> getMenuItemsByMenu(Integer menuId, Users currentUser) {
+    public List<MenuItem> getMenuItemsByMenu(Long menuId, Users currentUser) {
         Menu menu = menuRepo.findById(menuId)
                 .orElseThrow(() -> new EntityNotFoundException("Menu not found with ID: " + menuId));
 
@@ -43,7 +43,7 @@ public class MenuItemService {
     }
 
     @Transactional(readOnly = true)
-    public MenuItem getMenuItemById(Integer menuItemId, Users currentUser) {
+    public MenuItem getMenuItemById(Long menuItemId, Users currentUser) {
         MenuItem menuItem = menuItemRepo.findById(menuItemId)
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found with ID: " + menuItemId));
 
@@ -97,7 +97,7 @@ public class MenuItemService {
     }
 
     @Transactional
-    public MenuItem updateMenuItem(Integer menuItemId, MenuItemRequest menuItemRequest, Users currentUser) {
+    public MenuItem updateMenuItem(Long menuItemId, MenuItemRequest menuItemRequest, Users currentUser) {
         MenuItem menuItem = menuItemRepo.findById(menuItemId)
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found with ID: " + menuItemId));
 
@@ -127,7 +127,7 @@ public class MenuItemService {
     }
 
     @Transactional
-    public void removeItemFromMenu(Integer menuItemId, Users currentUser) {
+    public void removeItemFromMenu(Long menuItemId, Users currentUser) {
         MenuItem menuItem = menuItemRepo.findById(menuItemId)
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found with ID: " + menuItemId));
 
@@ -138,7 +138,7 @@ public class MenuItemService {
     }
 
     @Transactional
-    public void removeAllItemsFromMenu(Integer menuId, Users currentUser) {
+    public void removeAllItemsFromMenu(Long menuId, Users currentUser) {
         Menu menu = menuRepo.findById(menuId)
                 .orElseThrow(() -> new EntityNotFoundException("Menu not found with ID: " + menuId));
 

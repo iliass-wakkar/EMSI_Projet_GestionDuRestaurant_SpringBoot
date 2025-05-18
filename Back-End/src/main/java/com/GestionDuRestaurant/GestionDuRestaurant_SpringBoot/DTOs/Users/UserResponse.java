@@ -6,12 +6,11 @@ import com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.modeles.Users;
 import java.time.LocalDateTime;
 
 public record UserResponse(
-        Integer id,
+        Long id,
         String email,
         String fullName,
         UserRole role,
-        LocalDateTime creationDate
-) {
+        LocalDateTime creationDate) {
     // Conversion method in your Users entity
     public static UserResponse fromEntity(Users user) {
         return new UserResponse(
@@ -19,7 +18,6 @@ public record UserResponse(
                 user.getEmail(),
                 user.getFullName(),
                 user.getRole(),
-                user.getCreationDate()
-        );
+                user.getCreationDate());
     }
 }

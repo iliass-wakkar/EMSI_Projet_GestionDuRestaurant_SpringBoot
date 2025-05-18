@@ -24,7 +24,7 @@ public class MenuItemController {
     // Get menu items by menu
     @GetMapping("/menus/{menuId}/items")
     public ResponseEntity<?> getMenuItemsByMenu(
-            @PathVariable Integer menuId,
+            @PathVariable Long menuId,
             @CurrentUser Users currentUser) {
         try {
             List<MenuItem> menuItems = menuItemService.getMenuItemsByMenu(menuId, currentUser);
@@ -44,7 +44,7 @@ public class MenuItemController {
     // Get menu item by ID
     @GetMapping("/menu-items/{menuItemId}")
     public ResponseEntity<?> getMenuItemById(
-            @PathVariable Integer menuItemId,
+            @PathVariable Long menuItemId,
             @CurrentUser Users currentUser) {
         try {
             MenuItem menuItem = menuItemService.getMenuItemById(menuItemId, currentUser);
@@ -87,7 +87,7 @@ public class MenuItemController {
     // Update menu item
     @PutMapping("/menu-items/{menuItemId}")
     public ResponseEntity<?> updateMenuItem(
-            @PathVariable Integer menuItemId,
+            @PathVariable Long menuItemId,
             @Valid @RequestBody MenuItemRequest menuItemRequest,
             @CurrentUser Users currentUser) {
         try {
@@ -111,7 +111,7 @@ public class MenuItemController {
     // Remove item from menu
     @DeleteMapping("/menu-items/{menuItemId}")
     public ResponseEntity<?> removeItemFromMenu(
-            @PathVariable Integer menuItemId,
+            @PathVariable Long menuItemId,
             @CurrentUser Users currentUser) {
         try {
             menuItemService.removeItemFromMenu(menuItemId, currentUser);
@@ -131,7 +131,7 @@ public class MenuItemController {
     // Remove all items from menu
     @DeleteMapping("/menus/{menuId}/items")
     public ResponseEntity<?> removeAllItemsFromMenu(
-            @PathVariable Integer menuId,
+            @PathVariable Long menuId,
             @CurrentUser Users currentUser) {
         try {
             menuItemService.removeAllItemsFromMenu(menuId, currentUser);

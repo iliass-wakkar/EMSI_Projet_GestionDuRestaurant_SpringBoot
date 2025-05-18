@@ -19,7 +19,7 @@ import java.util.List;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Full name is required")
     @Column(nullable = false)
@@ -63,7 +63,7 @@ public class Users {
     public Users() {
     }
 
-    public Users(Integer id, String fullName, String email, String password,
+    public Users(Long id, String fullName, String email, String password,
             String phoneNumber, LocalDateTime creationDate,
             LocalDateTime lastLogin, UserRole role,
             boolean active, boolean locked,
@@ -110,11 +110,11 @@ public class Users {
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -222,7 +222,7 @@ public class Users {
         this.managedUsers = managedUsers;
     }
 
-    public boolean managesUser(Integer userId) {
+    public boolean managesUser(Long userId) {
         return managedUsers.stream()
                 .anyMatch(user -> user.getId().equals(userId));
     }

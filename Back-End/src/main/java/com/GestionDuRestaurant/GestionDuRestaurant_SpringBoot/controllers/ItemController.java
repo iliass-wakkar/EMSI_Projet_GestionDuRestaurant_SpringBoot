@@ -40,7 +40,7 @@ public class ItemController {
     // Get items by restaurant
     @GetMapping("/restaurants/{restaurantId}/items")
     public ResponseEntity<?> getItemsByRestaurant(
-            @PathVariable Integer restaurantId,
+            @PathVariable Long restaurantId,
             @CurrentUser Users currentUser) {
         try {
             List<Item> items = itemService.getItemsByRestaurant(restaurantId, currentUser);
@@ -60,7 +60,7 @@ public class ItemController {
     // Get items by restaurant and category
     @GetMapping("/restaurants/{restaurantId}/items/category/{category}")
     public ResponseEntity<?> getItemsByCategory(
-            @PathVariable Integer restaurantId,
+            @PathVariable Long restaurantId,
             @PathVariable ItemCategory category,
             @CurrentUser Users currentUser) {
         try {

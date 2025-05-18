@@ -14,7 +14,7 @@ public class Restaurant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Restaurant name is required")
     @Size(max = 100, message = "Restaurant name must be less than 100 characters")
@@ -71,11 +71,11 @@ public class Restaurant {
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class RestaurantController {
@@ -26,10 +27,11 @@ public class RestaurantController {
             @Valid @RequestBody RestaurantRequest restaurantRequest,
             @CurrentUser Users currentUser) {
         try {
-            Restaurant createdRestaurant = restaurantService.createRestaurant( currentUser, restaurantRequest);
+            Restaurant createdRestaurant = restaurantService.createRestaurant(currentUser, restaurantRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdRestaurant);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new RestorantErrorResponse("Invalid restaurant data", e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(new RestorantErrorResponse("Invalid restaurant data", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new RestorantErrorResponse("Restaurant creation failed", e.getMessage()));
@@ -54,7 +56,7 @@ public class RestaurantController {
     // Read Endpoint (Get by ID)
     @GetMapping("/restaurants/{restaurantId}")
     public ResponseEntity<?> getRestaurantById(
-            @PathVariable Integer restaurantId,
+            @PathVariable Long restaurantId,
             @CurrentUser Users currentUser) {
         try {
             Restaurant restaurant = restaurantService.getRestaurantById(restaurantId, currentUser);
@@ -71,11 +73,12 @@ public class RestaurantController {
     // Update Endpoint
     @PutMapping("/restaurants/{restaurantId}")
     public ResponseEntity<?> updateRestaurant(
-            @PathVariable Integer restaurantId,
+            @PathVariable Long restaurantId,
             @Valid @RequestBody RestaurantRequest restaurantRequest,
             @CurrentUser Users currentUser) {
         try {
-            Restaurant updatedRestaurant = restaurantService.updateRestaurant(currentUser ,restaurantId, restaurantRequest);
+            Restaurant updatedRestaurant = restaurantService.updateRestaurant(currentUser, restaurantId,
+                    restaurantRequest);
             return ResponseEntity.ok(updatedRestaurant);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -92,7 +95,7 @@ public class RestaurantController {
     // Delete Endpoint
     @DeleteMapping("/restaurants/{restaurantId}")
     public ResponseEntity<?> deleteRestaurant(
-            @PathVariable Integer restaurantId,
+            @PathVariable Long restaurantId,
             @CurrentUser Users currentUser) {
         try {
             restaurantService.deleteRestaurant(restaurantId, currentUser);
@@ -117,9 +120,20 @@ public class RestaurantController {
         }
 
         // Getters and setters
-        public String getError() { return error; }
-        public void setError(String error) { this.error = error; }
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RestaurantRepo extends JpaRepository<Restaurant, Integer> {
+public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
     // Find restaurants by city
     List<Restaurant> findByCity(String city);
 

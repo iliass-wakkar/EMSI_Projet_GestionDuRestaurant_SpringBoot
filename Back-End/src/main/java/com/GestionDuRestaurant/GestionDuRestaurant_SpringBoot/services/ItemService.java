@@ -64,7 +64,7 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<Item> getItemsByRestaurant(Integer restaurantId, Users currentUser) {
+    public List<Item> getItemsByRestaurant(Long restaurantId, Users currentUser) {
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + restaurantId));
 
@@ -90,7 +90,7 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<Item> getItemsByCategory(Integer restaurantId, ItemCategory category, Users currentUser) {
+    public List<Item> getItemsByCategory(Long restaurantId, ItemCategory category, Users currentUser) {
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + restaurantId));
 

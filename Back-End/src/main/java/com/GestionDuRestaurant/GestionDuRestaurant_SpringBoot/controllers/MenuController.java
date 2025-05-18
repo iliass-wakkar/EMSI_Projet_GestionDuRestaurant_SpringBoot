@@ -39,7 +39,7 @@ public class MenuController {
     // Get menus by restaurant
     @GetMapping("/restaurants/{restaurantId}/menus")
     public ResponseEntity<?> getMenusByRestaurant(
-            @PathVariable Integer restaurantId,
+            @PathVariable Long restaurantId,
             @CurrentUser Users currentUser) {
         try {
             List<Menu> menus = menuService.getMenusByRestaurant(restaurantId, currentUser);

@@ -9,16 +9,15 @@ public class UserUpdateRequest {
     private String currentPassword;
     private String newPassword;
 
-    private int owner_id;
+    private Long owner_id;
 
     // Getters and setters
 
-
-    public int getOwner_id() {
+    public Long getOwner_id() {
         return owner_id;
     }
 
-    public void setOwner_id(int owner_id) {
+    public void setOwner_id(Long owner_id) {
         this.owner_id = owner_id;
     }
 
@@ -61,7 +60,6 @@ public class UserUpdateRequest {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-
 
     // Add validation annotations as needed
 }

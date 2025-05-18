@@ -116,7 +116,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public Restaurant updateRestaurant(Users currentUser, Integer restaurantId, RestaurantRequest restaurantRequest) {
+    public Restaurant updateRestaurant(Users currentUser, Long restaurantId, RestaurantRequest restaurantRequest) {
         // 1. Find the restaurant
         Restaurant existingRestaurant = restaurantRepo.findById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + restaurantId));
@@ -227,7 +227,7 @@ public class RestaurantService {
     }
 
     @Transactional(readOnly = true)
-    public Restaurant getRestaurantById(Integer restaurantId, Users currentUser) {
+    public Restaurant getRestaurantById(Long restaurantId, Users currentUser) {
         if (currentUser == null) {
             throw new SecurityException("Authentication required");
         }
@@ -261,9 +261,9 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void deleteRestaurant(Integer restaurantId, Users currentUser) {
+    public void deleteRestaurant(Long restaurantId, Users currentUser) {
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found! "));
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + restaurantId));
 
         UserRole userRole = currentUser.getRole();
         switch (userRole) {

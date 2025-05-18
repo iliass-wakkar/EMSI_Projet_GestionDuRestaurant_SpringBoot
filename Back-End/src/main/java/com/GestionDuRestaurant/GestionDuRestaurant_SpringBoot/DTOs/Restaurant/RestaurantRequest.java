@@ -1,6 +1,5 @@
 package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Restaurant;
 
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
@@ -25,37 +24,71 @@ public class RestaurantRequest {
     @Size(max = 100, message = "Email must be less than 100 characters")
     private String email;
 
-    private Integer managerId;
-    private Integer ownerId;
-
+    private Long managerId;
+    private Long ownerId;
 
     // Getters and Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Integer getOwnerId() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(Integer ownerId) {
+    public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getAddress() {
+        return address;
+    }
 
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getCity() {
+        return city;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-    public Integer getManagerId() { return managerId; }
-    public void setManagerId(Integer managerId) { this.managerId = managerId; }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Long getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
+    }
 }

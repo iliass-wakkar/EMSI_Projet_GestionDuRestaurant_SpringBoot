@@ -88,7 +88,7 @@ public class UserService {
         }
     }
 
-    public void deleteUser(Integer userId, Users currentUser) {
+    public void deleteUser(Long userId, Users currentUser) {
         // Find the user to be deleted
         Users userToDelete = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -171,7 +171,7 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public Users updateUserProfile(Integer userId, Users currentUser, UserUpdateRequest updateRequest) {
+    public Users updateUserProfile(Long userId, Users currentUser, UserUpdateRequest updateRequest) {
         if (currentUser == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
         }
@@ -258,9 +258,9 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Users getUserProfile(Integer userId, Users currentUser) {
+    public Users getUserProfile(Long userId, Users currentUser) {
         if (currentUser == null) {
-            throw new AccessDeniedException("Authentication required");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
         }
 
         // Find the user whose profile is being requested

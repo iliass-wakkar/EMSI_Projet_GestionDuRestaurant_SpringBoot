@@ -20,7 +20,7 @@ public class MenuItemRequest {
     private LocalDate endDate;
 
     @Positive(message = "Price override must be greater than zero")
-    private BigDecimal priceOverride;
+    private Double priceOverride;
 
     // Getters and setters
     public Long getMenuId() {
@@ -63,11 +63,11 @@ public class MenuItemRequest {
         this.endDate = endDate;
     }
 
-    public BigDecimal getPriceOverride() {
+    public Double getPriceOverride() {
         return priceOverride;
     }
 
-    public void setPriceOverride(BigDecimal priceOverride) {
+    public void setPriceOverride(Double priceOverride) {
         this.priceOverride = priceOverride;
     }
 }

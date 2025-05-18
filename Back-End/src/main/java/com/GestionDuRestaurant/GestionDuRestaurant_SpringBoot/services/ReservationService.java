@@ -116,7 +116,7 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public Reservation getReservationById(Integer reservationId, Users currentUser) {
+    public Reservation getReservationById(Long reservationId, Users currentUser) {
         if (currentUser == null) {
             throw new SecurityException("Authentication required");
         }
@@ -142,7 +142,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public Reservation updateReservation(Users currentUser, Integer reservationId, ReservationRequest request) {
+    public Reservation updateReservation(Users currentUser, Long reservationId, ReservationRequest request) {
         if (currentUser == null) {
             throw new SecurityException("Authentication required");
         }
@@ -169,7 +169,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void deleteReservation(Integer reservationId, Users currentUser) {
+    public void deleteReservation(Long reservationId, Users currentUser) {
         if (currentUser == null) {
             throw new SecurityException("Authentication required");
         }

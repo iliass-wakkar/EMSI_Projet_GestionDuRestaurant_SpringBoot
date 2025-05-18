@@ -45,7 +45,7 @@ public class MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> getMenusByRestaurant(Integer restaurantId, Users currentUser) {
+    public List<Menu> getMenusByRestaurant(Long restaurantId, Users currentUser) {
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + restaurantId));
 
@@ -152,7 +152,6 @@ public class MenuService {
                         && !restaurant.equals(newrestaurant)) {
                     throw new SecurityException("You can only update menus for your own restaurants");
                 }
-
                 break;
 
             case MANAGER:
