@@ -1,5 +1,7 @@
 package com.GestionDuRestaurant.GestionDuRestaurant_SpringBoot.DTOs.Users;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserUpdateRequest {
 
     private String fullName;
@@ -8,6 +10,7 @@ public class UserUpdateRequest {
     // Optional fields for password update
     private String currentPassword;
     private String newPassword;
+    private MultipartFile image;
 
     private Long owner_id;
 
@@ -59,6 +62,14 @@ public class UserUpdateRequest {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     // Add validation annotations as needed

@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -134,20 +135,20 @@ public class UserController {
     @PutMapping("/profile")
     public ResponseEntity<?> updateCurrentUserProfile(
             @CurrentUser Users currentUser,
-            @RequestBody @Valid UserUpdateRequest updateRequest) {
+            @ModelAttribute @Valid UserUpdateRequest updateRequest) {
         try {
             Users updatedUser = userService.updateUserProfile(currentUser, updateRequest);
-            return ResponseEntity.ok(updatedUser);
+            return ResponseEntity.ok(updatedUser.toResponse());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error updating profile: " + e.getMessage());
         }
     }
 
     @PutMapping("/users/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('OWNER')")
     public ResponseEntity<?> updateUserProfile(
             @PathVariable Long userId,
-            @RequestBody @Valid UserUpdateRequest updateRequest,
+            @ModelAttribute @Valid UserUpdateRequest updateRequest,
             @CurrentUser Users currentUser) {
         try {
             if (currentUser == null || !currentUser.getRole().equals(UserRole.ADMIN)) {
@@ -155,8 +156,8 @@ public class UserController {
                         .body("Only administrators can update user profiles");
             }
 
-            userService.updateUserProfile(userId, currentUser, updateRequest);
-            return ResponseEntity.ok().body("User updated successfully");
+            Users updatedUser = userService.updateUserProfile(userId, currentUser, updateRequest);
+            return ResponseEntity.ok(updatedUser.toResponse());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User with ID " + userId + " not found");
@@ -186,6 +187,25 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An error occurred while fetching the profile");
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getCurrentUserProfile(@CurrentUser Users currentUser) {
+        try {
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Unauthorized", "message", "Authentication required"));
+            }
+
+            Users userProfile = userService.getCurrentUserProfile(currentUser);
+            return ResponseEntity.ok(userProfile.toResponse());
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(Map.of("error", e.getStatusCode().toString(), "message", e.getReason()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal Server Error", "message", "An unexpected error occurred"));
         }
     }
 }

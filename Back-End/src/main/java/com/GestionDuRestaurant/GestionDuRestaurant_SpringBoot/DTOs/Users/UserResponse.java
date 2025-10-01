@@ -10,7 +10,8 @@ public record UserResponse(
         String email,
         String fullName,
         UserRole role,
-        LocalDateTime creationDate) {
+        LocalDateTime creationDate,
+        String imageUrl) {
     // Conversion method in your Users entity
     public static UserResponse fromEntity(Users user) {
         return new UserResponse(
@@ -18,6 +19,7 @@ public record UserResponse(
                 user.getEmail(),
                 user.getFullName(),
                 user.getRole(),
-                user.getCreationDate());
+                user.getCreationDate(),
+                user.getImageUrl());
     }
 }

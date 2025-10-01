@@ -39,6 +39,9 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime creationDate = LocalDateTime.now();
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     private LocalDateTime lastLogin;
 
     @Enumerated(EnumType.STRING)
@@ -89,7 +92,8 @@ public class Users {
                 this.email,
                 this.fullName,
                 this.role,
-                this.creationDate);
+                this.creationDate,
+                this.imageUrl);
     }
 
     // Access Control Methods
@@ -235,6 +239,14 @@ public class Users {
     public void addManager(Users manager) {
         managedUsers.add(manager);
         manager.setManager(this);
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     // Equals and HashCode

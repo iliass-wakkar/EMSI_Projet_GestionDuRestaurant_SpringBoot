@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,6 +40,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
@@ -141,34 +145,94 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Users updateUserProfile(Users user, UserUpdateRequest updateRequest) {
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
-        }
-        // Update basic profile information
-        if (updateRequest.getFullName() != null) {
-            user.setFullName(updateRequest.getFullName());
-        }
-        if (updateRequest.getEmail() != null) {
-            user.setEmail(updateRequest.getEmail());
-        }
-        if (updateRequest.getPhoneNumber() != null) {
-            user.setPhoneNumber(updateRequest.getPhoneNumber());
-        }
-
-        // Handle password update if provided
-        if (updateRequest.getNewPassword() != null) {
-            // Verify current password if changing password
-            if (updateRequest.getCurrentPassword() == null ||
-                    !passwordEncoder.matches(updateRequest.getCurrentPassword(), user.getPassword())) {
-                throw new IllegalArgumentException("Current password is incorrect");
+        try {
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
             }
 
-            // Encode and set new password
-            user.setPassword(passwordEncoder.encode(updateRequest.getNewPassword()));
-        }
+            System.out.println("Starting profile update for user: " + user.getId());
 
-        return userRepo.save(user);
+            // Validate fullName if provided
+            if (updateRequest.getFullName() != null) {
+                if (updateRequest.getFullName().trim().isEmpty()) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Full name cannot be empty");
+                }
+                System.out.println("Updating fullName to: " + updateRequest.getFullName());
+                user.setFullName(updateRequest.getFullName());
+            }
+
+            // Validate email if provided
+            if (updateRequest.getEmail() != null) {
+                if (!updateRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email format");
+                }
+                if (!updateRequest.getEmail().equals(user.getEmail()) && 
+                    userRepo.existsByEmail(updateRequest.getEmail())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+                }
+                System.out.println("Updating email to: " + updateRequest.getEmail());
+                user.setEmail(updateRequest.getEmail());
+            }
+
+            // Validate phone number if provided
+            if (updateRequest.getPhoneNumber() != null) {
+                if (!updateRequest.getPhoneNumber().matches("^\\+?[1-9][0-9]{7,14}$")) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                        "Invalid phone number format. Must be 8-15 digits and may start with +");
+                }
+                System.out.println("Updating phoneNumber to: " + updateRequest.getPhoneNumber());
+                user.setPhoneNumber(updateRequest.getPhoneNumber());
+            }
+
+            // Handle image upload if provided
+            if (updateRequest.getImage() != null && !updateRequest.getImage().isEmpty()) {
+                try {
+                    // Delete old image if exists
+                    if (user.getImageUrl() != null) {
+                        System.out.println("Deleting old image: " + user.getImageUrl());
+                        fileStorageService.deleteFile(user.getImageUrl());
+                    }
+                    // Store new image
+                    String imageUrl = fileStorageService.storeFile(updateRequest.getImage());
+                    System.out.println("New image stored at: " + imageUrl);
+                    user.setImageUrl(imageUrl);
+                } catch (IOException e) {
+                    System.out.println("Error storing image: " + e.getMessage());
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                            "Failed to store image: " + e.getMessage());
+                }
+            }
+
+            // Handle password update if provided
+            if (updateRequest.getNewPassword() != null) {
+                if (updateRequest.getNewPassword().length() < 6) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                        "New password must be at least 6 characters long");
+                }
+                // Verify current password if changing password
+                if (updateRequest.getCurrentPassword() == null ||
+                        !passwordEncoder.matches(updateRequest.getCurrentPassword(), user.getPassword())) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is incorrect");
+                }
+                System.out.println("Updating password");
+                user.setPassword(passwordEncoder.encode(updateRequest.getNewPassword()));
+            }
+
+            System.out.println("Attempting to save user to database");
+            Users savedUser = userRepo.save(user);
+            System.out.println("User saved successfully with ID: " + savedUser.getId());
+            return savedUser;
+        } catch (ResponseStatusException e) {
+            System.out.println("ResponseStatusException caught: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error updating profile: " + e.getMessage());
+        }
     }
 
     public Users updateUserProfile(Long userId, Users currentUser, UserUpdateRequest updateRequest) {
@@ -222,6 +286,21 @@ public class UserService {
         }
         if (updateRequest.getPhoneNumber() != null) {
             user.setPhoneNumber(updateRequest.getPhoneNumber());
+        }
+
+        // Handle image upload if provided
+        if (updateRequest.getImage() != null && !updateRequest.getImage().isEmpty()) {
+            try {
+                // Delete old image if exists
+                if (user.getImageUrl() != null) {
+                    fileStorageService.deleteFile(user.getImageUrl());
+                }
+                // Store new image
+                String imageUrl = fileStorageService.storeFile(updateRequest.getImage());
+                user.setImageUrl(imageUrl);
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to store image");
+            }
         }
 
         // Handle password update if provided
@@ -299,5 +378,16 @@ public class UserService {
             default:
                 throw new AccessDeniedException("Insufficient privileges to view user profile");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Users getCurrentUserProfile(Users currentUser) {
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+        }
+        
+        // Return the current user's profile
+        return userRepo.findById(currentUser.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 }
